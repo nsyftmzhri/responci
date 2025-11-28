@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard — Data Mahasiswa</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <div class="app d-flex" id="app">
+    <nav id="sidebar" class="sidebar bg-primary text-white p-3">
+      <div class="sidebar-header d-flex align-items-center justify-content-between">
+        <h4 class="m-0">Admin</h4>
+        <button id="btn-toggle-sidebar" class="btn btn-sm btn-light d-md-none">☰</button>
+      </div>
+      <hr class="border-light" />
+      <ul class="nav flex-column gap-2">
+        <li class="nav-item"><a href="#" class="nav-link text-white active">Dashboard</a></li>
+        <li class="nav-item"><a href="#" class="nav-link text-white">Mahasiswa</a></li>
+        <li class="nav-item"><a href="#" class="nav-link text-white">Setting</a></li>
+      </ul>
+      <div class="mt-auto small">© Dashboard Demo</div>
+    </nav>
+
+    <main class="content p-4 w-100">
+      <div class="container-fluid">
+        <div class="row mb-3 align-items-center">
+          <div class="col-6 col-md-8">
+            <h2>Data Mahasiswa</h2>
+            <p class="text-muted">Universitas 'Aisyiyah Yogyakarta</p>
+          </div>
+          <div class="col-6 col-md-4 text-end">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">+ Tambah Mahasiswa</button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-12 col-md-6">
+            <input id="searchInput" class="form-control" placeholder="Cari nama / NIM / Program studi..." />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive shadow-sm rounded">
+              <table id="dataTable" class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                  <tr>
+                    <th>#</th>
+                    <th>Nama</th>
+                    <th>NIM</th>
+                    <th>Program Studi</th>
+                    <th>Angkatan</th>
+                    <th class="text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-12 col-md-4">
+            <div class="card p-3">
+              <div>Total Mahasiswa: <strong id="totalCount">0</strong></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form id="addForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Tambah Mahasiswa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">
+            <label class="form-label">Nama</label>
+            <input id="addNama" required class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">NIM</label>
+            <input id="addNim" required class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Program Studi</label>
+            <input id="addProdi" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Angkatan</label>
+            <input id="addAngkatan" type="number" min="2000" max="2100" class="form-control" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <form id="editForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Mahasiswa</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input id="editId" type="hidden" />
+          <div class="mb-2">
+            <label class="form-label">Nama</label>
+            <input id="editNama" required class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">NIM</label>
+            <input id="editNim" required class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Program Studi</label>
+            <input id="editProdi" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Angkatan</label>
+            <input id="editAngkatan" type="number" min="2000" max="2100" class="form-control" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-4">
+          <h5>Yakin ingin menghapus?</h5>
+          <p id="deleteInfo" class="small text-muted"></p>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <button id="confirmDeleteBtn" class="btn btn-danger">Hapus</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
